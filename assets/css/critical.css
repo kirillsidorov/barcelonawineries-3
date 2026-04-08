@@ -1,0 +1,240 @@
+/* ============================================================
+   CRITICAL CSS — inlined in <head>
+   Design system: Cormorant Garamond + Inter, warm cream palette
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg:           #f6f1ea;
+  --surface:      rgba(255,255,255,0.86);
+  --surface-strong:#fffdfa;
+  --surface-soft: #efe5d8;
+  --stroke:       rgba(61,45,33,.12);
+  --text:         #2e261f;
+  --muted:        #6f6358;
+  --faint:        #9f9184;
+  --wine:         #7d2334;
+  --wine-dark:    #5f1826;
+  --olive:        #66704d;
+  --gold:         #b48a57;
+  --shadow-sm:    0 10px 24px rgba(44,33,24,.06);
+  --shadow-lg:    0 24px 60px rgba(44,33,24,.10);
+  --radius-sm:    18px;
+  --radius-md:    28px;
+  --radius-lg:    38px;
+  --content:      1240px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(180,138,87,.14), transparent 20%),
+    radial-gradient(circle at right 18%, rgba(125,35,52,.08), transparent 20%),
+    linear-gradient(180deg, #efe7dc 0%, #f7f2eb 18%, #fbf8f3 100%);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+.container {
+  width: min(calc(100% - 32px), var(--content));
+  margin-inline: auto;
+}
+
+/* ── SKIP LINK ─────────────────────────────────────────── */
+.skip-link {
+  position: absolute; top: -100%; left: 1rem;
+  padding: .5rem 1rem; background: var(--wine); color: #fff;
+  font-size: .8rem; text-decoration: none; border-radius: 8px;
+  z-index: 9999; transition: top .2s;
+}
+.skip-link:focus { top: .5rem; }
+
+/* ── HEADER ────────────────────────────────────────────── */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  backdrop-filter: blur(18px);
+  background: rgba(246,241,234,.78);
+  border-bottom: 1px solid rgba(61,45,33,.08);
+}
+.header-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; min-height: 76px;
+}
+.brand {
+  display: flex; align-items: center; gap: 14px; text-decoration: none;
+}
+.brand-mark {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: linear-gradient(180deg, var(--wine) 0%, var(--wine-dark) 100%);
+  box-shadow: var(--shadow-sm); color: #fff; font-size: 18px;
+  flex-shrink: 0;
+}
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; line-height: .9; letter-spacing: -.03em;
+}
+.brand-sub {
+  display: block; margin-top: 4px; color: var(--muted);
+  font-size: .78rem; letter-spacing: .08em;
+  text-transform: uppercase; font-weight: 700;
+}
+.site-nav {
+  display: flex; align-items: center; gap: 18px;
+  color: var(--muted); font-weight: 600; font-size: .95rem;
+}
+.site-nav a { text-decoration: none; padding: 10px 0; transition: color .2s; }
+.site-nav a:hover { color: var(--wine); }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+
+/* ── BUTTONS ───────────────────────────────────────────── */
+.btn, .btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 0 20px; border-radius: 999px;
+  font-weight: 700; text-decoration: none;
+  border: 1px solid transparent; transition: .2s ease;
+  font-family: 'Inter', sans-serif; font-size: .95rem;
+  white-space: nowrap;
+}
+.btn {
+  background: linear-gradient(180deg, var(--wine) 0%, var(--wine-dark) 100%);
+  color: #fff; box-shadow: 0 14px 28px rgba(125,35,52,.18);
+}
+.btn:hover { transform: translateY(-1px); opacity: .92; }
+.btn-secondary {
+  background: rgba(255,255,255,.72); border-color: var(--stroke); color: var(--text);
+}
+.btn-secondary:hover { background: rgba(255,255,255,.95); }
+
+/* ── IMAGE PLACEHOLDER ─────────────────────────────────── */
+.img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(155deg, rgba(102,112,77,.18), rgba(180,138,87,.13)),
+              linear-gradient(180deg, #d4dcc8 0%, #efe2d0 100%);
+  position: relative;
+}
+.img-placeholder__icon {
+  font-size: 3rem; line-height: 1; position: relative; z-index: 1;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.1));
+}
+.img-real { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── FOOTER ────────────────────────────────────────────── */
+.site-footer {
+  padding: 38px 0 60px; color: var(--muted);
+  border-top: 1px solid rgba(61,45,33,.08); margin-top: 60px;
+}
+.footer-inner {
+  display: flex; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; letter-spacing: -.03em; margin-bottom: .3rem;
+}
+.footer-cols {
+  display: flex; gap: 48px; flex-wrap: wrap;
+}
+.footer-col h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; margin: 0 0 .75rem; color: var(--text);
+}
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.footer-col a { text-decoration: none; font-size: .9rem; transition: color .2s; }
+.footer-col a:hover { color: var(--wine); }
+.footer-bottom {
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid rgba(61,45,33,.08);
+  font-size: .8rem; color: var(--faint);
+  display: flex; flex-direction: column; gap: .4rem;
+}
+
+/* ── BREADCRUMBS ───────────────────────────────────────── */
+.breadcrumbs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  color: var(--muted); font-size: .92rem; margin-bottom: 16px;
+  list-style: none; padding: 0;
+}
+.breadcrumbs a { color: var(--muted); text-decoration: none; transition: color .2s; }
+.breadcrumbs a:hover { color: var(--wine); }
+.breadcrumbs li + li::before { content: '›'; margin-right: 8px; opacity: .5; }
+
+/* ── EYEBROW ───────────────────────────────────────────── */
+.eyebrow {
+  display: inline-flex; gap: 10px; align-items: center;
+  padding: 8px 14px; border-radius: 999px;
+  background: rgba(125,35,52,.08); color: var(--wine-dark);
+  font-size: .75rem; text-transform: uppercase;
+  letter-spacing: .1em; font-weight: 800;
+}
+
+/* ── HEADINGS ──────────────────────────────────────────── */
+h1, h2, h3 {
+  margin: 0; font-family: 'Cormorant Garamond', serif;
+  letter-spacing: -.04em; line-height: .96; font-weight: 700;
+}
+
+/* ── HERO SHELL (shared across pages) ──────────────────── */
+.hero {
+  overflow: hidden; border-radius: var(--radius-lg);
+  border: 1px solid rgba(61,45,33,.08);
+  background:
+    radial-gradient(circle at top right, rgba(180,138,87,.18), transparent 25%),
+    linear-gradient(135deg, rgba(255,250,245,.98) 0%, rgba(242,232,219,.96) 100%);
+  box-shadow: var(--shadow-lg);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0,1.08fr) minmax(340px,.92fr);
+  gap: 26px; padding: 30px;
+}
+.hero-side { display: grid; gap: 14px; }
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+}
+.stat {
+  padding: 18px; border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.62); border: 1px solid rgba(61,45,33,.06);
+}
+.stat span {
+  display: block; margin-bottom: 8px; font-size: .72rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 800;
+}
+.stat strong { font-size: 1rem; line-height: 1.45; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.pill, .chip {
+  display: inline-flex; align-items: center; padding: 8px 12px;
+  border-radius: 999px; background: #f3ece4;
+  color: var(--muted); font-weight: 800; font-size: .76rem; letter-spacing: .04em;
+}
+.hero-panel {
+  padding: 22px; border-radius: var(--radius-md);
+  border: 1px solid rgba(61,45,33,.08); background: rgba(255,255,255,.76);
+}
+.hero-panel h2 { font-size: 1.85rem; margin-bottom: 10px; }
+.hero-panel p { margin: 0; color: var(--muted); line-height: 1.72; }
+.hero-panel.primary {
+  background: linear-gradient(180deg, rgba(125,35,52,.96) 0%, rgba(95,24,38,.98) 100%);
+  color: #fff;
+}
+.hero-panel.primary p { color: rgba(255,255,255,.88); }
+.hero-image {
+  min-height: 290px; border-radius: var(--radius-md);
+  border: 1px solid rgba(61,45,33,.08);
+  background: linear-gradient(155deg,rgba(102,112,77,.18),rgba(180,138,87,.13)),
+              linear-gradient(180deg,#d4dcc8 0%,#efe2d0 100%);
+  overflow: hidden; position: relative;
+}
+.hero-image img, .hero-image .img-real { width: 100%; height: 100%; object-fit: cover; }

@@ -1,0 +1,39 @@
+# 1. Настройка главного файла для папок и корня сайта
+# Это исправит ошибку 403 на главной странице
+DirectoryIndex router.php
+
+# 2. Базовые настройки безопасности и кодировки
+Options -Indexes
+Options +FollowSymLinks
+AddDefaultCharset UTF-8
+
+# 3. Включаем перенаправления
+RewriteEngine On
+
+# 4. Редирект с WWW на БЕЗ WWW
+# Убедись, что в config.php SITE_URL также без www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# 5. Принудительный HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 6. ГЛАВНЫЙ РОУТИНГ
+# Если запрос — это НЕ реальный файл
+RewriteCond %{REQUEST_FILENAME} !-f
+# И НЕ реальная папка (кроме корня, который обработает DirectoryIndex)
+RewriteCond %{REQUEST_FILENAME} !-d
+# Отправляем всё в router.php
+RewriteRule ^ router.php [QSA,L]
+
+# 7. ЗАЩИТА СИСТЕМНЫХ ФАЙЛОВ
+# Запрещаем доступ к конфигам и .env (синтаксис Apache 2.4)
+<FilesMatch "^(config|db|functions|\.env)\.php$">
+    Require all denied
+</FilesMatch>
+
+# Разрешаем запуск PHP скриптов (включая router.php)
+<FilesMatch "\.php$">
+    Require all granted
+</FilesMatch>
