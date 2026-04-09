@@ -1,10 +1,2 @@
-/* ============================================================
-   SINGLE WINERY — page-specific CSS (loaded async on winery pages)
-   Base design system is in critical.css + main.css
-   ============================================================ */
-
-/* hero lead paragraph */
-p.lead { margin: 0 0 22px; max-width: 60ch; color: var(--muted); line-height: 1.8; font-size: 1.05rem; }
-
-/* kicker label inside hero panel */
-.kicker { display: block; margin-bottom: 10px; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; opacity: .82; }
+/* single-winery.css — winery page specific */
+.lead { font-size: 1.02rem; }

@@ -14,7 +14,11 @@
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/<?= e($extraCss) ?>" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="<?= ASSETS_URL ?>/css/<?= e($extraCss) ?>"></noscript>
     <?php endif; ?>
-    <link rel="icon" type="image/svg+xml" href="<?= ASSETS_URL ?>/img/favicon.svg">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= ASSETS_URL ?>/img/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= ASSETS_URL ?>/img/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= ASSETS_URL ?>/img/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="<?= ASSETS_URL ?>/img/favicon.ico">
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -22,10 +26,10 @@
 <header class="site-header">
     <div class="container header-row">
         <a class="brand" href="<?= SITE_URL ?>/">
-            <span class="brand-mark">🍷</span>
+            <img class="brand-mark" src="<?= ASSETS_URL ?>/img/brand-mark.png" alt="<?= e(SITE_NAME) ?>" width="36" height="36">
             <span>
                 <span class="brand-name"><?= e(SITE_NAME) ?></span>
-                <span class="brand-sub">Editorial wine guide near Barcelona</span>
+                <span class="brand-sub">Catalan wine guide</span>
             </span>
         </a>
         <nav class="site-nav" aria-label="Primary navigation">
@@ -36,7 +40,7 @@
         </nav>
         <div class="header-actions">
             <a class="btn-secondary" href="<?= SITE_URL ?>/category/no-car-needed">No car needed</a>
-            <a class="btn" href="<?= SITE_URL ?>/region/penedes">Explore now</a>
+            <a class="btn" href="<?= SITE_URL ?>/region/penedes">Explore</a>
         </div>
     </div>
 </header>
