@@ -12,85 +12,89 @@ $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri    = rtrim($uri, '/') ?: '/';
 $parts  = explode('/', ltrim($uri, '/'));
 
-// ─── Route Definitions ────────────────────────────────────────────────────────
-// Pattern: [segment_0, segment_1] → controller + method
-// e.g. /winery/can-rafols-dels-caus → ['winery', <slug>]
-
 $segment0 = $parts[0] ?? '';
 $segment1 = $parts[1] ?? '';
 
 try {
     match (true) {
 
-        // HOME  →  /
+        // HOME
         $uri === '/' => (function () {
             require_once CONTROLLERS_PATH . '/HomeController.php';
             $data = HomeController::index();
             render('home', $data);
         })(),
-        
-        // ТЕСТОВЫЙ ДИЗАЙН  →  /test
-        $uri === '/test' => (function () {
-            // Просто отдаем наш новый файл без подключения стандартных хедеров
-            require_once ROOT_PATH . '/templates/test_design.php';
-        })(),
 
-        // WINERY  →  /winery/[slug]
+        // WINERY
         $segment0 === 'winery' && !empty($segment1) => (function () use ($segment1) {
             require_once CONTROLLERS_PATH . '/WineryController.php';
             $data = WineryController::show($segment1);
             render('single-winery', $data);
         })(),
 
-        // REGION  →  /region/[slug]
+        // REGION
         $segment0 === 'region' && !empty($segment1) => (function () use ($segment1) {
             require_once CONTROLLERS_PATH . '/RegionController.php';
             $data = RegionController::show($segment1);
             render('region', $data);
         })(),
 
-        // CATEGORY / SEMANTIC HUB  →  /category/[slug]
-        // e.g. /category/no-car-needed, /category/family-friendly
+        // CATEGORY
         $segment0 === 'category' && !empty($segment1) => (function () use ($segment1) {
             require_once CONTROLLERS_PATH . '/CategoryController.php';
             $data = CategoryController::show($segment1);
             render('category', $data);
         })(),
 
-
-        // ADMIN PANEL
+        // ─── ADMIN PANEL ──────────────────────────────────────────
         str_starts_with($uri, '/admin') => (function () use ($uri) {
             require_once CONTROLLERS_PATH . '/AdminController.php';
-            
+
             match ($uri) {
-                '/admin'          => AdminController::index(),
-                '/admin/login'    => AdminController::login(),
-                '/admin/wineries' => AdminController::wineries(),
-                '/admin/edit'     => AdminController::edit($_GET['id'] ?? null),
-                '/admin/save'     => AdminController::save(),
-                '/admin/logout'   => AdminController::logout(),
-                default           => http_response_code(404),
+                // Core
+                '/admin'              => AdminController::index(),
+                '/admin/login'        => AdminController::login(),
+                '/admin/logout'       => AdminController::logout(),
+
+                // Wineries CRUD
+                '/admin/wineries'     => AdminController::wineries(),
+                '/admin/edit'         => AdminController::edit($_GET['id'] ?? null),
+                '/admin/save'         => AdminController::save(),
+                '/admin/delete'       => AdminController::delete(),
+                '/admin/toggle'       => AdminController::toggle(),
+
+                // Regions CRUD
+                '/admin/regions'      => AdminController::regions(),
+                '/admin/region-edit'  => AdminController::regionEdit($_GET['id'] ?? null),
+                '/admin/region-save'  => AdminController::regionSave(),
+
+                // Categories CRUD
+                '/admin/categories'   => AdminController::categories(),
+                '/admin/category-edit'=> AdminController::categoryEdit($_GET['id'] ?? null),
+                '/admin/category-save'=> AdminController::categorySave(),
+
+                default               => http_response_code(404),
             };
         })(),
-        // SITEMAP  →  /sitemap.xml
+
+        // SITEMAP
         $uri === '/sitemap.xml' => (function () {
             require_once CONTROLLERS_PATH . '/SitemapController.php';
             SitemapController::index();
         })(),
 
-        // Fallback → 404
+        // 404
         default => (function () {
             http_response_code(404);
             $data = [
                 'seo' => [
                     'title'       => '404 — Page Not Found | ' . SITE_NAME,
-                    'description' => 'Sorry, this page does not exist.', // Добавили ключ
-                    'canonical'   => ''                                   // Добавили ключ
+                    'description' => 'Sorry, this page does not exist.',
+                    'canonical'   => '',
                 ]
             ];
             render('404', $data);
         })(),
-
     };
 } catch (NotFoundException $e) {
     http_response_code(404);
@@ -104,13 +108,9 @@ try {
 }
 
 // ─── Render Helper ────────────────────────────────────────────────────────────
-/**
- * Extracts $data keys as variables, then includes the template.
- * Templates receive clean named variables — no $data['x'] noise.
- */
 function render(string $template, array $data = []): void
 {
-    extract($data, EXTR_SKIP); // EXTR_SKIP: never overwrite existing vars
+    extract($data, EXTR_SKIP);
     $templateFile = TEMPLATES_PATH . '/' . $template . '.php';
 
     if (!file_exists($templateFile)) {

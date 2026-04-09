@@ -1,0 +1,22 @@
+.env
+error_log
+georgia4_barcelonawineries.sql
+htaccess
+index.html
+README.md
+robots.txt
+schema.sql
+wineries_60_import.sql
+db copy.php
+barcelona_wineries_catalog_template.xlsx
+barcelona_wineries_catalog_with_15_wineries.xlsx
+barcelona_wineries_master_part1.xlsx
+templates/test_category_hub.html
+templates/test_design_homepage.html
+templates/test_design.php
+templates/test_region_page.html
+templates/test_winery_page.html
+templates/home-production.php
+assets/img/favicon-192 (1).png
+assets/img/background.webp
+.htaccess copy

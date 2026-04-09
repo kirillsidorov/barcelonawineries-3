@@ -1,67 +1,92 @@
 <?php include __DIR__ . '/header.php'; ?>
 
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="display-6">Welcome, Admin!</h2>
-            <p class="text-muted">Manage your Barcelona Wineries catalog and content from here.</p>
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <div class="subtitle">Overview of your winery directory</div>
+    </div>
+    <a href="/admin/edit" class="btn btn-wine"><i class="bi bi-plus-lg"></i> Add Winery</a>
+</div>
+
+<!-- Stats -->
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total wineries</div>
+        <div class="stat-value"><?= $stats['wineries'] ?? 0 ?></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Published</div>
+        <div class="stat-value"><?= $stats['published'] ?? 0 ?></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Featured</div>
+        <div class="stat-value"><?= $stats['featured'] ?? 0 ?></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Regions</div>
+        <div class="stat-value"><?= $stats['regions'] ?? 0 ?></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Categories</div>
+        <div class="stat-value"><?= $stats['categories'] ?? 0 ?></div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Recent wineries -->
+    <div class="col-lg-8">
+        <div class="admin-card">
+            <h5 style="font-weight:700;margin-bottom:16px;">Recently updated</h5>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Winery</th>
+                        <th>Region</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($recent ?? [] as $w): ?>
+                    <tr>
+                        <td class="name-cell">
+                            <a href="/admin/edit?id=<?= $w['id'] ?>"><?= e($w['name']) ?></a>
+                            <span class="slug">/winery/<?= e($w['slug']) ?></span>
+                        </td>
+                        <td><?= e($w['region_name'] ?? '—') ?></td>
+                        <td>
+                            <?php if ($w['is_published']): ?>
+                                <span class="badge-status badge-published">Published</span>
+                            <?php else: ?>
+                                <span class="badge-status badge-draft">Draft</span>
+                            <?php endif; ?>
+                        </td>
+                        <td style="font-size:.82rem;color:var(--admin-muted);"><?= date('M j', strtotime($w['updated_at'])) ?></td>
+                        <td><a href="/admin/edit?id=<?= $w['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="display-4 text-primary mb-2">
-                        <i class="bi bi-houses-fill"></i>
-                    </div>
-                    <h5 class="card-title">Wineries</h5>
-                    <p class="card-text text-muted">Manage your master catalog of vineyards.</p>
-                    <a href="/admin/wineries" class="btn btn-primary w-100">Manage Wineries</a>
-                </div>
+    <!-- Quick actions -->
+    <div class="col-lg-4">
+        <div class="admin-card" style="margin-bottom:12px;">
+            <h5 style="font-weight:700;margin-bottom:14px;">Quick actions</h5>
+            <div class="d-grid gap-2">
+                <a href="/admin/edit" class="btn btn-wine"><i class="bi bi-plus-lg"></i> Add winery</a>
+                <a href="/admin/wineries" class="btn btn-outline-secondary"><i class="bi bi-list-ul"></i> All wineries</a>
+                <a href="/admin/regions" class="btn btn-outline-secondary"><i class="bi bi-map"></i> Manage regions</a>
+                <a href="/admin/categories" class="btn btn-outline-secondary"><i class="bi bi-tags"></i> Manage categories</a>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="display-4 text-success mb-2">
-                        <i class="bi bi-geo-alt-fill"></i>
-                    </div>
-                    <h5 class="card-title">Regions</h5>
-                    <p class="card-text text-muted">Edit DO descriptions and SEO for wine regions.</p>
-                    <a href="#" class="btn btn-outline-success w-100 disabled">Manage Regions</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="display-4 text-warning mb-2">
-                        <i class="bi bi-google"></i>
-                    </div>
-                    <h5 class="card-title">Sitemap & Robots</h5>
-                    <p class="card-text text-muted">Check your SEO files and global settings.</p>
-                    <a href="/sitemap.xml" target="_blank" class="btn btn-outline-warning w-100">View Sitemap</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-5">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm p-4">
-                <h5><i class="bi bi-lightning-charge"></i> Quick Actions</h5>
-                <hr>
-                <div class="d-grid gap-2 d-md-block">
-                    <a href="/admin/edit" class="btn btn-success me-2">
-                        <i class="bi bi-plus-circle"></i> Add New Winery
-                    </a>
-                    <a href="/" target="_blank" class="btn btn-outline-secondary">
-                        <i class="bi bi-eye"></i> View Live Site
-                    </a>
-                </div>
+        <div class="admin-card">
+            <h5 style="font-weight:700;margin-bottom:14px;">Links</h5>
+            <div class="d-grid gap-2">
+                <a href="/" target="_blank" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-up-right"></i> View live site</a>
+                <a href="/sitemap.xml" target="_blank" class="btn btn-outline-secondary"><i class="bi bi-filetype-xml"></i> Sitemap</a>
             </div>
         </div>
     </div>

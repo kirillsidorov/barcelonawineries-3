@@ -39,13 +39,16 @@ final class WineryController
             throw new NotFoundException("Winery not found: {$slug}");
         }
 
+        // Related wineries from same region
         $related = $db->select(
             'wineries',
             ['[>]regions' => ['region_id' => 'id']],
             [
                 'wineries.slug', 'wineries.name', 'wineries.city',
                 'wineries.rating', 'wineries.review_count',
+                'wineries.distance_km',
                 'wineries.no_car_needed', 'wineries.intro',
+                'wineries.image_hero',
                 'regions.name(region_name)', 'regions.slug(region_slug)',
             ],
             [
@@ -53,9 +56,27 @@ final class WineryController
                 'wineries.slug[!]'   => $slug,
                 'wineries.is_published' => 1,
                 'ORDER' => ['wineries.rating' => 'DESC'],
-                'LIMIT' => 3,
+                'LIMIT' => 4,
             ]
         );
+
+        // Build relevant category links based on winery features
+        // PDF brief: "Links to 2–3 relevant categories"
+        $wineryCategories = [];
+        $categoryMap = [
+            'no_car_needed'  => ['slug' => 'no-car-needed',     'label' => 'Wineries without a car'],
+            'organic'        => ['slug' => 'organic-wines',      'label' => 'Organic wineries'],
+            'kids_welcome'   => ['slug' => 'family-friendly',    'label' => 'Family-friendly wineries'],
+            'has_restaurant' => ['slug' => 'restaurant-onsite',  'label' => 'Wineries with restaurants'],
+            'accommodation'  => ['slug' => 'with-accommodation', 'label' => 'Wineries with accommodation'],
+            'pet_friendly'   => ['slug' => 'pet-friendly',       'label' => 'Pet-friendly wineries'],
+        ];
+        foreach ($categoryMap as $col => $cat) {
+            if (!empty($winery[$col])) {
+                $wineryCategories[] = $cat;
+            }
+            if (count($wineryCategories) >= 3) break; // max 3 per PDF brief
+        }
 
         $breadcrumbs = [
             ['name' => 'Home',                  'url' => SITE_URL . '/'],
@@ -69,6 +90,6 @@ final class WineryController
             'type'        => 'place',
         ]);
 
-        return compact('seo', 'winery', 'related', 'breadcrumbs');
+        return compact('seo', 'winery', 'related', 'wineryCategories', 'breadcrumbs');
     }
 }

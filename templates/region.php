@@ -112,6 +112,59 @@
           </div>
         </section>
 
+        <!-- RELATED CATEGORIES (PDF brief: "Related category links") -->
+        <?php if (!empty($categories)): ?>
+        <section class="card-padded">
+          <div class="section-head"><div><h2>Browse <?= e($region['name']) ?> by experience</h2><p>Find wineries in this region that match your travel style.</p></div></div>
+          <div class="grid-3">
+            <?php foreach ($categories as $cat): ?>
+            <article class="card">
+              <div class="card-body">
+                <h3 style="font-size:1.35rem;"><?= e($cat['label']) ?></h3>
+                <a href="<?= url_category($cat['slug']) ?>">View category →</a>
+              </div>
+            </article>
+            <?php endforeach; ?>
+          </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- COMPARE REGIONS (PDF brief: "Compare-region block") -->
+        <?php if (!empty($relatedRegions)): ?>
+        <section class="card-padded">
+          <div class="section-head"><div><h2>Compare with other regions</h2><p>Exploring options? See how <?= e($region['name']) ?> compares to neighbouring wine regions.</p></div></div>
+          <div class="grid-2">
+            <?php foreach ($relatedRegions as $rel): ?>
+            <article class="card">
+              <div class="card-body">
+                <h3 style="font-size:1.35rem;"><?= e($rel['name']) ?></h3>
+                <p><?= e(mb_strimwidth($rel['description'], 0, 120, '…')) ?></p>
+                <a href="<?= url_region($rel['slug']) ?>">Explore <?= e($rel['name']) ?> →</a>
+              </div>
+            </article>
+            <?php endforeach; ?>
+          </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- COMMERCIAL CTA (PDF brief: "Commercial next-step block") -->
+        <section class="card-padded" style="background:var(--wine);color:#fff;border-color:var(--wine-dark);">
+          <div class="section-head"><div>
+            <h2 style="color:#fff;">Book a <?= e($region['name']) ?> wine tour</h2>
+            <p style="color:rgba(255,255,255,.78);">Skip the planning — join a guided day trip from Barcelona with transport, tastings, and local lunch included.</p>
+          </div></div>
+          <div class="grid-2">
+            <div class="fact" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);">
+              <span style="color:rgba(255,255,255,.6);">Guided day trips</span>
+              <div style="color:#fff;">Full-day tours from Barcelona with hotel pickup, winery visits, and tastings.</div>
+            </div>
+            <div class="fact" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);">
+              <span style="color:rgba(255,255,255,.6);">Self-guided options</span>
+              <div style="color:#fff;">Book individual tastings and plan your own route through <?= e($region['name']) ?>.</div>
+            </div>
+          </div>
+        </section>
+
         <!-- FAQ -->
         <section class="card-padded" id="faq">
           <div class="section-head"><div><h2>Questions about <?= e($region['name']) ?></h2></div></div>
@@ -143,9 +196,14 @@
         <section class="aside-card primary">
           <h3>Best next clicks</h3>
           <div class="aside-list">
-            <div class="aside-row"><span>Category</span><strong><a href="<?= SITE_URL ?>/category/no-car-needed" style="color:#fff;">No-car wineries</a></strong></div>
-            <div class="aside-row"><span>Category</span><strong><a href="<?= SITE_URL ?>/category/organic-wines" style="color:#fff;">Organic picks</a></strong></div>
-            <div class="aside-row"><span>Category</span><strong><a href="<?= SITE_URL ?>/category/family-friendly" style="color:#fff;">Family friendly</a></strong></div>
+            <?php if (!empty($categories)): ?>
+              <?php foreach ($categories as $cat): ?>
+              <div class="aside-row"><span>Category</span><strong><a href="<?= url_category($cat['slug']) ?>" style="color:#fff;"><?= e($cat['label']) ?></a></strong></div>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <div class="aside-row"><span>Category</span><strong><a href="<?= SITE_URL ?>/category/no-car-needed" style="color:#fff;">No-car wineries</a></strong></div>
+              <div class="aside-row"><span>Category</span><strong><a href="<?= SITE_URL ?>/category/organic-wines" style="color:#fff;">Organic picks</a></strong></div>
+            <?php endif; ?>
           </div>
         </section>
       </aside>

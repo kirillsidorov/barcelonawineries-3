@@ -18,10 +18,10 @@ require_once COMPONENTS_PATH . '/header.php';
     <div class="hero" style="margin-bottom:22px;">
       <div class="hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow"><?= e($winery['region_name']) ?> · <?= !empty($winery['city']) ? e($winery['city']) : 'Catalunya' ?></span>
+          <span class="eyebrow"><a href="<?= url_region($winery['region_slug']) ?>" style="text-decoration:none;color:inherit;"><?= e($winery['region_name']) ?></a> · <?= !empty($winery['city']) ? e($winery['city']) : 'Catalunya' ?></span>
           <h1 style="margin-top:18px;font-size:clamp(3rem,6vw,5.2rem);max-width:10ch;"><?= e($winery['name']) ?></h1>
           <div class="hero-pills">
-            <?php if (!empty($winery['distance_km'])): ?><span class="pill"><?= e($winery['distance_km']) ?> min from Barcelona</span><?php endif; ?>
+            <?php if (!empty($winery['distance_km'])): ?><span class="pill"><?= e($winery['distance_km']) ?> km from Barcelona</span><?php endif; ?>
             <?php if ($winery['organic']): ?><span class="pill">Organic</span><?php endif; ?>
             <?php if ($winery['no_car_needed']): ?><span class="pill">No car needed</span><?php endif; ?>
             <?php if ($winery['has_restaurant']): ?><span class="pill">Restaurant</span><?php endif; ?>
@@ -113,6 +113,23 @@ require_once COMPONENTS_PATH . '/header.php';
           </div>
         </section>
 
+        <!-- BEST FOR CATEGORIES (PDF brief: "Links to 2–3 relevant categories") -->
+        <?php if (!empty($wineryCategories)): ?>
+        <section class="card-padded">
+          <div class="section-head"><div><h2>Best for</h2><p><?= e($winery['name']) ?> fits these travel styles.</p></div></div>
+          <div class="grid-<?= min(count($wineryCategories), 3) ?>">
+            <?php foreach ($wineryCategories as $cat): ?>
+            <article class="card">
+              <div class="card-body">
+                <h3 style="font-size:1.2rem;"><?= e($cat['label']) ?></h3>
+                <a href="<?= url_category($cat['slug']) ?>">Browse all →</a>
+              </div>
+            </article>
+            <?php endforeach; ?>
+          </div>
+        </section>
+        <?php endif; ?>
+
         <!-- FAQ -->
         <section class="card-padded">
           <div class="section-head"><div><h2>FAQ</h2><p>Common questions about visiting <?= e($winery['name']) ?>.</p></div></div>
@@ -134,21 +151,28 @@ require_once COMPONENTS_PATH . '/header.php';
           </div>
         </section>
 
-        <!-- RELATED WINERIES -->
+        <!-- RELATED WINERIES (PDF brief: "Similar wineries block with 3–4 internal links") -->
         <?php if (!empty($related)): ?>
         <section class="card-padded" id="related">
-          <div class="section-head"><div><h2>Similar wineries</h2><p>Other estates in <?= e($winery['region_name']) ?> worth comparing.</p></div></div>
-          <div class="related-grid">
-            <?php foreach ($related as $rel): ?>
-            <article class="related-card">
-              <strong><?= e($rel['name']) ?></strong>
-              <p><?= !empty($rel['city']) ? e($rel['city']) : e($winery['region_name']) ?><?= !empty($rel['intro']) ? ' — ' . e(mb_strimwidth($rel['intro'], 0, 80, '…')) : '' ?></p>
-              <a class="link" href="<?= url_winery($rel['slug']) ?>">Open winery page</a>
-            </article>
+          <div class="section-head"><div><h2>Similar wineries</h2><p>Other estates in <a class="text-link" href="<?= url_region($winery['region_slug']) ?>"><?= e($winery['region_name']) ?></a> worth comparing.</p></div></div>
+          <div class="grid-<?= min(count($related), 3) ?>">
+            <?php foreach ($related as $card): $isFirst = false; ?>
+              <?php include COMPONENTS_PATH . '/winery-card.php'; ?>
             <?php endforeach; ?>
           </div>
         </section>
         <?php endif; ?>
+
+        <!-- COMMERCIAL CTA (PDF brief: "Commercial next-step block") -->
+        <section class="card-padded" style="background:var(--wine);color:#fff;border-color:var(--wine-dark);">
+          <h2 style="color:#fff;font-size:1.6rem;margin-bottom:8px;">Ready to visit <?= e($winery['name']) ?>?</h2>
+          <p style="color:rgba(255,255,255,.78);margin:0 0 16px;line-height:1.65;">Compare guided tours and direct booking options for <?= e($winery['name']) ?> and other wineries in <a href="<?= url_region($winery['region_slug']) ?>" style="color:#fff;text-decoration:underline;"><?= e($winery['region_name']) ?></a>.</p>
+          <?php if (!empty($winery['gyg_url'])): ?>
+          <a class="btn" href="<?= gyg_url($winery['gyg_url'], $winery['slug']) ?>" target="_blank" rel="noopener sponsored" style="background:#fff;color:var(--wine);box-shadow:none;">See available tours</a>
+          <?php elseif (!empty($winery['website_url'])): ?>
+          <a class="btn" href="<?= e($winery['website_url']) ?>" target="_blank" rel="noopener noreferrer" style="background:#fff;color:var(--wine);box-shadow:none;">Visit official website</a>
+          <?php endif; ?>
+        </section>
 
       </div>
 
@@ -208,6 +232,18 @@ require_once COMPONENTS_PATH . '/header.php';
           <a class="btn" href="<?= e($winery['website_url']) ?>" target="_blank" rel="noopener noreferrer">Visit official website</a>
           <?php endif; ?>
         </section>
+
+        <!-- CATEGORY LINKS IN SIDEBAR -->
+        <?php if (!empty($wineryCategories)): ?>
+        <section class="aside-card">
+          <h3>Also in</h3>
+          <div class="aside-list">
+            <?php foreach ($wineryCategories as $cat): ?>
+            <div class="aside-row"><span>Category</span><strong><a href="<?= url_category($cat['slug']) ?>" style="color:var(--wine);text-decoration:none;"><?= e($cat['label']) ?></a></strong></div>
+            <?php endforeach; ?>
+          </div>
+        </section>
+        <?php endif; ?>
       </aside>
     </div>
 
